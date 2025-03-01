@@ -38,36 +38,29 @@ src += Glob('nimble/nimble/host/services/tps/src/*.c')
 src += Glob('nimble/nimble/host/store/ram/src/*.c')
 src += Glob('nimble/nimble/host/util/src/*.c')
 
+# mesh
+if GetDepend(['RT_NIMBLE_MESH']):
+    path += [cwd + '/nimble/nimble/host/mesh/include']
+    src += Glob('nimble/nimble/host/mesh/src/*.c')
+
+# tinycrypt
+src += Glob('nimble/ext/tinycrypt/src/*.c')
+
 # HCI transport
 src += Glob('nimble/nimble/transport/src/*.c')
 src += Glob('nimble/nimble/transport/common/hci_h4/src/*.c')
+
+# nimble porting
+src += Glob('porting/nimble/src/*.c')
+
+# npl porting
+src += Glob('porting/npl/rtthread/src/*.c')
 
 # HCI transport porting
 if GetDepend(['RT_NIMBLE_HCI_USING_RTT_UART']) and not GetDepend(['RT_NIMBLE_HCI_USING_CUSTOM_IMPL']):
     src += ['porting/transport/rtthread/src/ble_hci_rtthread_uart.c']
 if GetDepend(['RT_NIMBLE_HCI_USING_RTT_VHCI']) and not GetDepend(['RT_NIMBLE_HCI_USING_CUSTOM_IMPL']):
     src += ['porting/transport/rtthread/src/ble_rtthread_vhci_dev.c']
-
-# mesh
-if GetDepend(['RT_NIMBLE_MESH']):
-    path += [cwd + '/nimble/nimble/host/mesh/include']
-    src += Glob('nimble/nimble/host/mesh/src/*.c')
-
-# Few utils and data structures copied from Mynewt
-src += Split('''
-    nimble/porting/nimble/src/endian.c
-    nimble/porting/nimble/src/mem.c
-    nimble/porting/nimble/src/nimble_port.c
-    nimble/porting/nimble/src/os_mbuf.c
-    nimble/porting/nimble/src/os_mempool.c
-    nimble/porting/nimble/src/os_msys_init.c
-    ''')
-
-# npl porting
-src += Glob('porting/npl/rtthread/src/*.c')
-
-# tinycrypt
-src += Glob('nimble/ext/tinycrypt/src/*.c')
 
 
 LOCAL_CCFLAGS = ''
@@ -80,7 +73,7 @@ if rtconfig.CROSS_TOOL == 'keil':
     CPPDEFINES.append('__ORDER_LITTLE_ENDIAN__=1234')
     CPPDEFINES.append('__ORDER_BIG_ENDIAN__=4321')
     CPPDEFINES.append('__BYTE_ORDER__=1234')
-    
+
 if rtconfig.CROSS_TOOL == 'gcc':
     LOCAL_CCFLAGS += ' -Wno-format -Wno-unused-variable -Wno-unused-but-set-variable'
 

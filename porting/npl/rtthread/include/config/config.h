@@ -4,6 +4,7 @@
  * Date           Author       Notes
  * 2018-12-29     ChenYong     first implementation
  * 2022-05-20     Jackistang   add ble host auto start
+ * 2025-03-01     Evlers       only hci transmission is supported
  */
 
 #ifndef __NUMBLE_CONFIG_H__
@@ -89,35 +90,5 @@
 #define BLE_MESH_CFG_CLI                         (1)
 #endif
 
-/**
- * Controller Configuration
- */
-#ifdef RT_NIMBLE_CTLR_THREAD_STACK_SIZE
-#define MYNEWT_VAL_BLE_CTLR_THREAD_STACK_SIZE   (RT_NIMBLE_CTLR_THREAD_STACK_SIZE)
-#endif
-
-#ifdef RT_NIMBLE_CTLR_THREAD_PRIORITY
-#define MYNEWT_VAL_BLE_CTLR_THREAD_PRIORITY     (RT_NIMBLE_CTLR_THREAD_PRIORITY)
-#endif
-
-#ifdef RT_NIMBLE_BSP_NRF51
-#define MYNEWT_VAL_BSP_NRF51                     (1)
-#endif
-
-#ifdef RT_NIMBLE_BSP_NRF52
-
-#define MYNEWT_VAL_BSP_NRF52                     (1)
-
-#define MYNEWT_VAL_TIMER_0 0
-#define MYNEWT_VAL_TIMER_5 1
-#define MYNEWT_VAL_OS_CPUTIME_FREQ 32768
-#define MYNEWT_VAL_OS_CPUTIME_TIMER_NUM 5
-#define MYNEWT_VAL_BLE_LL_RFMGMT_ENABLE_TIME 1500
-
-#endif
-
-#ifdef RT_NIMBLE_BSP_NRF52840
-#define MYNEWT_VAL_BSP_NRF52840                  (1)
-#endif
 
 #endif
