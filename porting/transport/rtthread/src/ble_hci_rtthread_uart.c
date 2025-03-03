@@ -24,7 +24,7 @@
 #include <rtdevice.h>
 
 #define DBG_TAG             "nimble.vhci"
-#define DBG_LVL             DBG_LOG
+#define DBG_LVL             DBG_INFO
 #include "rtdbg.h"
 
 static rt_sem_t rx_sem;
@@ -53,7 +53,11 @@ static rt_err_t rx_indicate(rt_device_t dev, rt_size_t size)
 
 static void rtthread_hci_rx_entry(void *parameter)
 {
-    uint8_t data[64];
+#if DBG_LVL >= DBG_LOG
+    static uint8_t data[512];
+#else
+        static uint8_t data[64];
+#endif /* DBG_LVL >= DBG_LOG */
     size_t data_len;
 
     rx_sem = rt_sem_create("hci_rx_sem", 0, RT_IPC_FLAG_FIFO);
@@ -63,10 +67,23 @@ static void rtthread_hci_rx_entry(void *parameter)
     while (1)
     {
         rt_sem_take(rx_sem, RT_WAITING_FOREVER);
-        data_len = rt_device_read(hci_dev, 0, data, sizeof(data));
-        if (data_len > 0)
+        while ((data_len = rt_device_read(hci_dev, 0, data, sizeof(data))) > 0)
         {
-            LOG_HEX("Rx: ", 16, data, data_len);
+#if DBG_LVL >= DBG_LOG
+            /* format: TAG rx(<type>) */
+            char head[sizeof(DBG_TAG) + sizeof("rx") + sizeof("none") + sizeof("()")];
+            char *type;
+            switch (data[0])
+            {
+                case HCI_H4_CMD: type = "cmd"; break;
+                case HCI_H4_ACL: type = "acl"; break;
+                case HCI_H4_EVT: type = "evt"; break;
+                case HCI_H4_ISO: type = "iso"; break;
+                default: type = "none"; break;
+            }
+            rt_snprintf(head, sizeof(head), "%s rx(%s)", DBG_TAG, type);
+            LOG_HEX(head, 16, data, data_len);
+#endif /* DBG_LVL >= DBG_LOG */
             hci_h4_sm_rx(&hci_h4sm, data, data_len);
         }
     }
@@ -128,9 +145,9 @@ int ble_transport_to_ll_cmd_impl(void *buf)
     data[0] = HCI_H4_CMD;
     memcpy(&data[1], buf, buf_len - 1);
 
-    LOG_HEX("Tx: ", 16, data, buf_len);
+    LOG_HEX("tx(cmd): ", 16, data, buf_len);
     if (rt_device_write(hci_dev, 0, data, buf_len) != buf_len) {
-        LOG_E("Error writing HCI_H4_CMD data");
+        LOG_E("error writing cmd data");
         res = -RT_ERROR;
         rt_free(data);
         goto __exit;
@@ -146,42 +163,33 @@ int ble_transport_to_ll_cmd_impl(void *buf)
 int ble_transport_to_ll_acl_impl(struct os_mbuf *om)
 {
     int res = 0;
-    struct os_mbuf *x = om;
+    int data_len = OS_MBUF_PKTLEN(om) + 1;
+    uint8_t *data = NULL;
 
-    while (x != NULL)
-    {
-        int data_len = OS_MBUF_PKTLEN(x) + 1;
-        uint8_t *data = NULL;
-
-        LOG_D("ble_transport_to_ll_acl_impl: %d bytes", data_len);
-
-        data = rt_malloc(data_len);
-        if (!data) {
-            LOG_E("%s: malloc failed", __func__);
-            res = -RT_ERROR;
-            goto __exit;
-        }
-
-        data[0] = HCI_H4_ACL;
-        res = ble_hs_mbuf_to_flat(x, &data[1], OS_MBUF_PKTLEN(x), NULL);
-        if (res) {
-            LOG_E("Error copying HCI_H4_ACL data %d", res);
-            res = -RT_ERROR;
-            rt_free(data);
-            goto __exit;
-        }
-
-        LOG_HEX("Tx: ", 16, data, data_len);
-        if (rt_device_write(hci_dev, 0, data, data_len) != data_len) {
-            LOG_E("Error writing HCI_H4_ACL data");
-            res = -RT_ERROR;
-            rt_free(data);
-            goto __exit;
-        }
-        rt_free(data);
-
-        x = SLIST_NEXT(x, om_next);
+    data = rt_malloc(data_len);
+    if (!data) {
+        LOG_E("%s: malloc failed", __func__);
+        res = -RT_ERROR;
+        goto __exit;
     }
+
+    data[0] = HCI_H4_ACL;
+    res = ble_hs_mbuf_to_flat(om, &data[1], OS_MBUF_PKTLEN(om), NULL);
+    if (res) {
+        LOG_E("error copying acl data %d", res);
+        res = -RT_ERROR;
+        rt_free(data);
+        goto __exit;
+    }
+
+    LOG_HEX("tx(acl): ", 16, data, data_len);
+    if (rt_device_write(hci_dev, 0, data, data_len) != data_len) {
+        LOG_E("error writing acl data");
+        res = -RT_ERROR;
+        rt_free(data);
+        goto __exit;
+    }
+    rt_free(data);
 
     __exit:
     os_mbuf_free_chain(om);
