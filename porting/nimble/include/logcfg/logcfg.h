@@ -9,8 +9,11 @@
 #include "log_common/log_common.h"
 #include <rtconfig.h>
 
+#ifndef DBG_TAG
 #define DBG_TAG "nimble"
+#endif /* DBG_TAG */
 
+#ifndef DBG_LVL
 #ifdef NIMBLE_DEBUG_LEVEL_D
 #define DBG_LVL DBG_LOG
 #endif
@@ -23,24 +26,150 @@
 #ifdef NIMBLE_DEBUG_LEVEL_E
 #define DBG_LVL DBG_ERROR
 #endif
+#endif /* DBG_LVL */
 
 #include "rtdbg.h"
 
-#define BLE_HS_LOG_DEBUG(...)       LOG_D(__VA_ARGS__)
-#define BLE_HS_LOG_INFO(...)        LOG_I(__VA_ARGS__)
-#define BLE_HS_LOG_WARN(...)        LOG_W(__VA_ARGS__)
-#define BLE_HS_LOG_ERROR(...)       LOG_E(__VA_ARGS__)
-#define BLE_HS_LOG_CRITICAL(...)    LOG_E(__VA_ARGS__)
-#define BLE_HS_LOG_DISABLED(...)    IGNORE(__VA_ARGS__)
+#define BLE_HS_LOG_DEBUG(...)                   LOG_D(__VA_ARGS__)
+#define BLE_HS_LOG_INFO(...)                    LOG_I(__VA_ARGS__)
+#define BLE_HS_LOG_WARN(...)                    LOG_W(__VA_ARGS__)
+#define BLE_HS_LOG_ERROR(...)                   LOG_E(__VA_ARGS__)
+#define BLE_HS_LOG_CRITICAL(...)                LOG_E(__VA_ARGS__)
+#define BLE_HS_LOG_DISABLED(...)                IGNORE(__VA_ARGS__)
 
-#define MODLOG_DFLT_DEBUG(...)     LOG_D(__VA_ARGS__)
-#define MODLOG_DFLT_INFO(...)      LOG_I(__VA_ARGS__)
-#define MODLOG_DFLT_WARN(...)      LOG_W(__VA_ARGS__)
-#define MODLOG_DFLT_ERROR(...)     LOG_E(__VA_ARGS__)
-#define MODLOG_DFLT_CRITICAL(...)  LOG_E(__VA_ARGS__)
-#define MODLOG_DFLT_DISABLED(...)  IGNORE(__VA_ARGS__)
+#define BLE_MESH_ACCESS_LOG_DEBUG(...)          LOG_D(__VA_ARGS__)
+#define BLE_MESH_ACCESS_LOG_INFO(...)           LOG_I(__VA_ARGS__)
+#define BLE_MESH_ACCESS_LOG_WARN(...)           LOG_W(__VA_ARGS__)
+#define BLE_MESH_ACCESS_LOG_ERROR(...)          LOG_E(__VA_ARGS__)
+#define BLE_MESH_ACCESS_LOG_CRITICAL(...)       LOG_E(__VA_ARGS__)
+#define BLE_MESH_ACCESS_LOG_DISABLED(...)       IGNORE(__VA_ARGS__)
 
-#define MODLOG_DFLT(ml_lvl_, ...) \
-    MODLOG_DFLT_ ## ml_lvl_(__VA_ARGS__)
+#define BLE_MESH_ADV_LOG_DEBUG(...)             LOG_D(__VA_ARGS__)
+#define BLE_MESH_ADV_LOG_INFO(...)              LOG_I(__VA_ARGS__)
+#define BLE_MESH_ADV_LOG_WARN(...)              LOG_W(__VA_ARGS__)
+#define BLE_MESH_ADV_LOG_ERROR(...)             LOG_E(__VA_ARGS__)
+#define BLE_MESH_ADV_LOG_CRITICAL(...)          LOG_E(__VA_ARGS__)
+#define BLE_MESH_ADV_LOG_DISABLED(...)          IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_BEACON_LOG_DEBUG(...)          LOG_D(__VA_ARGS__)
+#define BLE_MESH_BEACON_LOG_INFO(...)           LOG_I(__VA_ARGS__)
+#define BLE_MESH_BEACON_LOG_WARN(...)           LOG_W(__VA_ARGS__)
+#define BLE_MESH_BEACON_LOG_ERROR(...)          LOG_E(__VA_ARGS__)
+#define BLE_MESH_BEACON_LOG_CRITICAL(...)       LOG_E(__VA_ARGS__)
+#define BLE_MESH_BEACON_LOG_DISABLED(...)       IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_CRYPTO_LOG_DEBUG(...)          LOG_D(__VA_ARGS__)
+#define BLE_MESH_CRYPTO_LOG_INFO(...)           LOG_I(__VA_ARGS__)
+#define BLE_MESH_CRYPTO_LOG_WARN(...)           LOG_W(__VA_ARGS__)
+#define BLE_MESH_CRYPTO_LOG_ERROR(...)          LOG_E(__VA_ARGS__)
+#define BLE_MESH_CRYPTO_LOG_CRITICAL(...)       LOG_E(__VA_ARGS__)
+#define BLE_MESH_CRYPTO_LOG_DISABLED(...)       IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_FRIEND_LOG_DEBUG(...)          LOG_D(__VA_ARGS__)
+#define BLE_MESH_FRIEND_LOG_INFO(...)           LOG_I(__VA_ARGS__)
+#define BLE_MESH_FRIEND_LOG_WARN(...)           LOG_W(__VA_ARGS__)
+#define BLE_MESH_FRIEND_LOG_ERROR(...)          LOG_E(__VA_ARGS__)
+#define BLE_MESH_FRIEND_LOG_CRITICAL(...)       LOG_E(__VA_ARGS__)
+#define BLE_MESH_FRIEND_LOG_DISABLED(...)       IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_HEARTBEAT_LOG_DEBUG(...)       LOG_D(__VA_ARGS__)
+#define BLE_MESH_HEARTBEAT_LOG_INFO(...)        LOG_I(__VA_ARGS__)
+#define BLE_MESH_HEARTBEAT_LOG_WARN(...)        LOG_W(__VA_ARGS__)
+#define BLE_MESH_HEARTBEAT_LOG_ERROR(...)       LOG_E(__VA_ARGS__)
+#define BLE_MESH_HEARTBEAT_LOG_CRITICAL(...)    LOG_E(__VA_ARGS__)
+#define BLE_MESH_HEARTBEAT_LOG_DISABLED(...)    IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_LOG_DEBUG(...)                 LOG_D(__VA_ARGS__)
+#define BLE_MESH_LOG_INFO(...)                  LOG_I(__VA_ARGS__)
+#define BLE_MESH_LOG_WARN(...)                  LOG_W(__VA_ARGS__)
+#define BLE_MESH_LOG_ERROR(...)                 LOG_E(__VA_ARGS__)
+#define BLE_MESH_LOG_CRITICAL(...)              LOG_E(__VA_ARGS__)
+#define BLE_MESH_LOG_DISABLED(...)              IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_LOW_POWER_LOG_DEBUG(...)       LOG_D(__VA_ARGS__)
+#define BLE_MESH_LOW_POWER_LOG_INFO(...)        LOG_I(__VA_ARGS__)
+#define BLE_MESH_LOW_POWER_LOG_WARN(...)        LOG_W(__VA_ARGS__)
+#define BLE_MESH_LOW_POWER_LOG_ERROR(...)       LOG_E(__VA_ARGS__)
+#define BLE_MESH_LOW_POWER_LOG_CRITICAL(...)    LOG_E(__VA_ARGS__)
+#define BLE_MESH_LOW_POWER_LOG_DISABLED(...)    IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_MODEL_LOG_DEBUG(...)           LOG_D(__VA_ARGS__)
+#define BLE_MESH_MODEL_LOG_INFO(...)            LOG_I(__VA_ARGS__)
+#define BLE_MESH_MODEL_LOG_WARN(...)            LOG_W(__VA_ARGS__)
+#define BLE_MESH_MODEL_LOG_ERROR(...)           LOG_E(__VA_ARGS__)
+#define BLE_MESH_MODEL_LOG_CRITICAL(...)        LOG_E(__VA_ARGS__)
+#define BLE_MESH_MODEL_LOG_DISABLED(...)        IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_NET_KEYS_LOG_DEBUG(...)        LOG_D(__VA_ARGS__)
+#define BLE_MESH_NET_KEYS_LOG_INFO(...)         LOG_I(__VA_ARGS__)
+#define BLE_MESH_NET_KEYS_LOG_WARN(...)         LOG_W(__VA_ARGS__)
+#define BLE_MESH_NET_KEYS_LOG_ERROR(...)        LOG_E(__VA_ARGS__)
+#define BLE_MESH_NET_KEYS_LOG_CRITICAL(...)     LOG_E(__VA_ARGS__)
+#define BLE_MESH_NET_KEYS_LOG_DISABLED(...)     IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_NET_LOG_DEBUG(...)             LOG_D(__VA_ARGS__)
+#define BLE_MESH_NET_LOG_INFO(...)              LOG_I(__VA_ARGS__)
+#define BLE_MESH_NET_LOG_WARN(...)              LOG_W(__VA_ARGS__)
+#define BLE_MESH_NET_LOG_ERROR(...)             LOG_E(__VA_ARGS__)
+#define BLE_MESH_NET_LOG_CRITICAL(...)          LOG_E(__VA_ARGS__)
+#define BLE_MESH_NET_LOG_DISABLED(...)          IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_PROVISIONER_LOG_DEBUG(...)     LOG_D(__VA_ARGS__)
+#define BLE_MESH_PROVISIONER_LOG_INFO(...)      LOG_I(__VA_ARGS__)
+#define BLE_MESH_PROVISIONER_LOG_WARN(...)      LOG_W(__VA_ARGS__)
+#define BLE_MESH_PROVISIONER_LOG_ERROR(...)     LOG_E(__VA_ARGS__)
+#define BLE_MESH_PROVISIONER_LOG_CRITICAL(...)  LOG_E(__VA_ARGS__)
+#define BLE_MESH_PROVISIONER_LOG_DISABLED(...)  IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_PROV_DEVICE_LOG_DEBUG(...)     LOG_D(__VA_ARGS__)
+#define BLE_MESH_PROV_DEVICE_LOG_INFO(...)      LOG_I(__VA_ARGS__)
+#define BLE_MESH_PROV_DEVICE_LOG_WARN(...)      LOG_W(__VA_ARGS__)
+#define BLE_MESH_PROV_DEVICE_LOG_ERROR(...)     LOG_E(__VA_ARGS__)
+#define BLE_MESH_PROV_DEVICE_LOG_CRITICAL(...)  LOG_E(__VA_ARGS__)
+#define BLE_MESH_PROV_DEVICE_LOG_DISABLED(...)  IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_PROV_LOG_DEBUG(...)            LOG_D(__VA_ARGS__)
+#define BLE_MESH_PROV_LOG_INFO(...)             LOG_I(__VA_ARGS__)
+#define BLE_MESH_PROV_LOG_WARN(...)             LOG_W(__VA_ARGS__)
+#define BLE_MESH_PROV_LOG_ERROR(...)            LOG_E(__VA_ARGS__)
+#define BLE_MESH_PROV_LOG_CRITICAL(...)         LOG_E(__VA_ARGS__)
+#define BLE_MESH_PROV_LOG_DISABLED(...)         IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_PROXY_LOG_DEBUG(...)           LOG_D(__VA_ARGS__)
+#define BLE_MESH_PROXY_LOG_INFO(...)            LOG_I(__VA_ARGS__)
+#define BLE_MESH_PROXY_LOG_WARN(...)            LOG_W(__VA_ARGS__)
+#define BLE_MESH_PROXY_LOG_ERROR(...)           LOG_E(__VA_ARGS__)
+#define BLE_MESH_PROXY_LOG_CRITICAL(...)        LOG_E(__VA_ARGS__)
+#define BLE_MESH_PROXY_LOG_DISABLED(...)        IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_RPL_LOG_DEBUG(...)             LOG_D(__VA_ARGS__)
+#define BLE_MESH_RPL_LOG_INFO(...)              LOG_I(__VA_ARGS__)
+#define BLE_MESH_RPL_LOG_WARN(...)              LOG_W(__VA_ARGS__)
+#define BLE_MESH_RPL_LOG_ERROR(...)             LOG_E(__VA_ARGS__)
+#define BLE_MESH_RPL_LOG_CRITICAL(...)          LOG_E(__VA_ARGS__)
+#define BLE_MESH_RPL_LOG_DISABLED(...)          IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_SETTINGS_LOG_DEBUG(...)        LOG_D(__VA_ARGS__)
+#define BLE_MESH_SETTINGS_LOG_INFO(...)         LOG_I(__VA_ARGS__)
+#define BLE_MESH_SETTINGS_LOG_WARN(...)         LOG_W(__VA_ARGS__)
+#define BLE_MESH_SETTINGS_LOG_ERROR(...)        LOG_E(__VA_ARGS__)
+#define BLE_MESH_SETTINGS_LOG_CRITICAL(...)     LOG_E(__VA_ARGS__)
+#define BLE_MESH_SETTINGS_LOG_DISABLED(...)     IGNORE(__VA_ARGS__)
+
+#define BLE_MESH_TRANS_LOG_DEBUG(...)           LOG_D(__VA_ARGS__)
+#define BLE_MESH_TRANS_LOG_INFO(...)            LOG_I(__VA_ARGS__)
+#define BLE_MESH_TRANS_LOG_WARN(...)            LOG_W(__VA_ARGS__)
+#define BLE_MESH_TRANS_LOG_ERROR(...)           LOG_E(__VA_ARGS__)
+#define BLE_MESH_TRANS_LOG_CRITICAL(...)        LOG_E(__VA_ARGS__)
+#define BLE_MESH_TRANS_LOG_DISABLED(...)        IGNORE(__VA_ARGS__)
+
+#define MODLOG_DFLT_DEBUG(...)                  LOG_D(__VA_ARGS__)
+#define MODLOG_DFLT_INFO(...)                   LOG_I(__VA_ARGS__)
+#define MODLOG_DFLT_WARN(...)                   LOG_W(__VA_ARGS__)
+#define MODLOG_DFLT_ERROR(...)                  LOG_E(__VA_ARGS__)
+#define MODLOG_DFLT_CRITICAL(...)               LOG_E(__VA_ARGS__)
+#define MODLOG_DFLT_DISABLED(...)               IGNORE(__VA_ARGS__)
+
+#define MODLOG_DFLT(ml_lvl_, ...)               MODLOG_DFLT_ ## ml_lvl_(__VA_ARGS__)
 
 #endif
