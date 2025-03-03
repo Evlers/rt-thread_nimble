@@ -43,8 +43,8 @@ STAILQ_HEAD(, os_mempool) g_os_mempool_list;
 #if MYNEWT_VAL(OS_MEMPOOL_POISON)
 static uint32_t os_mem_poison = 0xde7ec7ed;
 
-static_assert(sizeof(struct os_memblock) % 4 == 0, "sizeof(struct os_memblock) shall be aligned to 4");
-static_assert(sizeof(os_mem_poison) == 4, "sizeof(os_mem_poison) shall be 4");
+RT_STATIC_ASSERT(os_memblock_size, sizeof(struct os_memblock) % 4 == 0);    /* sizeof(struct os_memblock) shall be aligned to 4 */
+RT_STATIC_ASSERT(os_mem_poison_size, sizeof(os_mem_poison) == 4);           /* sizeof(os_mem_poison) shall be 4 */
 
 static void
 os_mempool_poison(const struct os_mempool *mp, void *start)
@@ -307,8 +307,8 @@ os_memblock_from(const struct os_mempool *mp, const void *block_addr)
     uintptr_t baddr32;
     uint32_t end;
 
-    static_assert(sizeof block_addr == sizeof baddr32,
-                  "Pointer to void must be 32-bits.");
+    /* pointer to void must be 32-bits. */
+    RT_STATIC_ASSERT(block_addr_size, sizeof block_addr == sizeof baddr32);
 
     baddr32 = (uint32_t)(uintptr_t)block_addr;
     true_block_size = OS_MEMPOOL_TRUE_BLOCK_SIZE(mp);
