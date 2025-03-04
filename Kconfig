@@ -95,42 +95,42 @@ if RT_USING_NIMBLE
             Select this for LE Observer role support.
     endmenu # Bluetooth Role support
 
-    menu "Bluetooth Mesh support"
-        config RT_NIMBLE_MESH
-        bool "Bluetooth Mesh support"
-        default n
-        depends on RT_NIMBLE_ROLE_BROADCASTER && RT_NIMBLE_ROLE_OBSERVER
-        help
-            This option enables Bluetooth Mesh support. The specific
-            features that are available may depend on other features
-            that have been enabled in the stack, such as GATT support.
+    # menu "Bluetooth Mesh support"
+    #     config RT_NIMBLE_MESH
+    #     bool "Bluetooth Mesh support"
+    #     default n
+    #     depends on RT_NIMBLE_ROLE_BROADCASTER && RT_NIMBLE_ROLE_OBSERVER
+    #     help
+    #         This option enables Bluetooth Mesh support. The specific
+    #         features that are available may depend on other features
+    #         that have been enabled in the stack, such as GATT support.
 
-        if RT_NIMBLE_MESH
-            config RT_NIMBLE_MESH_DEVICE_NAME
-                string "BLE Mesh device/node name"
-                default "nimble-node"
-                help
-                    This value defines BLE Mesh device/node name.
+    #     if RT_NIMBLE_MESH
+    #         config RT_NIMBLE_MESH_DEVICE_NAME
+    #             string "BLE Mesh device/node name"
+    #             default "nimble-node"
+    #             help
+    #                 This value defines BLE Mesh device/node name.
 
-            config RT_NIMBLE_MESH_ADV_THREAD_STACK_SIZE
-                int "The thread stack Size of Mesh advertising"
-                default 1024
-                help
-                    Set Mesh advertising thread stack size.
+    #         config RT_NIMBLE_MESH_ADV_THREAD_STACK_SIZE
+    #             int "The thread stack Size of Mesh advertising"
+    #             default 1024
+    #             help
+    #                 Set Mesh advertising thread stack size.
 
-            config RT_NIMBLE_MESH_ADV_THREAD_PRIORITY
-                int "The thread priority of Mesh Advertising"
-                default 9
-                help
-                    Set Mesh Advertising thread priority.
+    #         config RT_NIMBLE_MESH_ADV_THREAD_PRIORITY
+    #             int "The thread priority of Mesh Advertising"
+    #             default 9
+    #             help
+    #                 Set Mesh Advertising thread priority.
 
-            config RT_NIMBLE_MESH_CFG_CLI
-                bool "Support for Configuration Client Model"
-                help
-                    Enable support for the configuration client model.
-        endif # RT_NIMBLE_MESH
+    #         config RT_NIMBLE_MESH_CFG_CLI
+    #             bool "Support for Configuration Client Model"
+    #             help
+    #                 Enable support for the configuration client model.
+    #     endif # RT_NIMBLE_MESH
 
-    endmenu # Bluetooth Mesh support
+    # endmenu # Bluetooth Mesh support
 
     config RT_NIMBLE_MAX_CONNECTIONS
         int "Maximum number of concurrent connections"

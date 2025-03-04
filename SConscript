@@ -39,12 +39,16 @@ src += Glob('nimble/nimble/host/store/ram/src/*.c')
 src += Glob('nimble/nimble/host/util/src/*.c')
 
 # mesh
-if GetDepend(['RT_NIMBLE_MESH']):
-    path += [cwd + '/nimble/nimble/host/mesh/include']
-    src += Glob('nimble/nimble/host/mesh/src/*.c')
+# if GetDepend(['RT_NIMBLE_MESH']):
+#     path += [cwd + '/nimble/nimble/host/mesh/include']
+#     src += Glob('nimble/nimble/host/mesh/src/*.c')
 
 # tinycrypt
 src += Glob('nimble/ext/tinycrypt/src/*.c')
+ecc_dh_node = next((f for f in src if f.name == 'ecc_dh.c'), None)
+if ecc_dh_node:
+    src.remove(ecc_dh_node)
+src += [cwd + '/porting/ext/tinycrypt/src/ecc_dh.c']
 
 # HCI transport
 src += Glob('nimble/nimble/transport/src/*.c')
