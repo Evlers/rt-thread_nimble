@@ -214,4 +214,4 @@ static int rtthread_ble_transport_init(void)
 
     return 0;
 }
-INIT_APP_EXPORT(rtthread_ble_transport_init);
+INIT_ENV_EXPORT(rtthread_ble_transport_init);
