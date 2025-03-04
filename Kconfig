@@ -32,6 +32,10 @@ if RT_USING_NIMBLE
             config RT_NIMBLE_HCI_UART_FLOWCONTROL_CTSRTS
                 bool "Enable uart flowcontrol CTS/RTS"
                 default n
+            config RT_NIMBLE_HCI_UART_BUFFER_SIZE
+                int "The uart buffer size"
+                depends on RT_USING_SERIAL_V1
+                default 128
         endif
 
         if RT_NIMBLE_HCI_USING_RTT_VHCI

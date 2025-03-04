@@ -53,7 +53,7 @@ static rt_err_t rx_indicate(rt_device_t dev, rt_size_t size)
 static void rtthread_vhci_rx_entry(void *parameter)
 {
 #if DBG_LVL >= DBG_LOG
-static uint8_t data[512];
+    static uint8_t data[512];
 #else
     static uint8_t data[64];
 #endif /* DBG_LVL >= DBG_LOG */

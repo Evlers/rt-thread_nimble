@@ -56,7 +56,7 @@ static void rtthread_hci_rx_entry(void *parameter)
 #if DBG_LVL >= DBG_LOG
     static uint8_t data[512];
 #else
-        static uint8_t data[64];
+    static uint8_t data[64];
 #endif /* DBG_LVL >= DBG_LOG */
     size_t data_len;
 
@@ -91,6 +91,7 @@ static void rtthread_hci_rx_entry(void *parameter)
 
 static int rtthread_hci_uart_init(void)
 {
+    struct rt_serial_device *serial;
     struct serial_configure config = RT_SERIAL_CONFIG_DEFAULT;
 
     hci_dev = rt_device_find(RT_NIMBLE_HCI_UART_DEVICE_NAME);
@@ -98,12 +99,16 @@ static int rtthread_hci_uart_init(void)
         return -1;
     }
 
+#ifdef RT_USING_SERIAL_V2
+    serial = (struct rt_serial_device *)hci_dev;
+    memcpy(&config, &serial->config, sizeof(config));
+#endif
     config.baud_rate = BAUD_RATE_115200;
     config.data_bits = DATA_BITS_8;
     config.stop_bits = STOP_BITS_1;
 #ifdef RT_USING_SERIAL_V2
 #else
-    config.bufsz     = 128;
+    config.bufsz     = RT_NIMBLE_HCI_UART_BUFFER_SIZE;
 #endif
     config.parity    = PARITY_NONE;
 #ifdef RT_NIMBLE_HCI_UART_FLOWCONTROL_CTSRTS
