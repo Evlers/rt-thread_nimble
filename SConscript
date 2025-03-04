@@ -48,7 +48,7 @@ src += Glob('nimble/ext/tinycrypt/src/*.c')
 ecc_dh_node = next((f for f in src if f.name == 'ecc_dh.c'), None)
 if ecc_dh_node:
     src.remove(ecc_dh_node)
-src += [cwd + '/porting/ext/tinycrypt/src/ecc_dh.c']
+src += Glob('porting/ext/tinycrypt/src/ecc_dh.c')
 
 # HCI transport
 src += Glob('nimble/nimble/transport/src/*.c')
@@ -62,9 +62,9 @@ src += Glob('porting/npl/rtthread/src/*.c')
 
 # HCI transport porting
 if GetDepend(['RT_NIMBLE_HCI_USING_RTT_UART']) and not GetDepend(['RT_NIMBLE_HCI_USING_CUSTOM_IMPL']):
-    src += ['porting/transport/rtthread/src/ble_hci_rtthread_uart.c']
+    src += Glob('porting/transport/rtthread/src/ble_hci_rtthread_uart.c')
 if GetDepend(['RT_NIMBLE_HCI_USING_RTT_VHCI']) and not GetDepend(['RT_NIMBLE_HCI_USING_CUSTOM_IMPL']):
-    src += ['porting/transport/rtthread/src/ble_rtthread_vhci_dev.c']
+    src += Glob('porting/transport/rtthread/src/ble_rtthread_vhci_dev.c')
 
 
 LOCAL_CCFLAGS = ''
