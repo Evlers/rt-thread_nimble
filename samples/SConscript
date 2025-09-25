@@ -1,0 +1,32 @@
+from building import *
+import os
+
+def get_subdirs(parent_dir, exclude=None):
+    exclude = exclude or set()
+    return [
+        os.path.join(parent_dir, d) 
+        for d in os.listdir(parent_dir) 
+        if os.path.isdir(os.path.join(parent_dir, d)) 
+           and d not in exclude
+    ]
+
+cwd = GetCurrentDir()
+
+# add nimble source and header files
+src = Glob('*.c')
+CPPPATH = [cwd]
+
+# add service profiles
+src += Glob('profiles/*/*.c')
+
+# add all subdirectories under profiles to CPPPATH
+CPPPATH += get_subdirs(os.path.join(cwd, 'profiles'))
+
+group = DefineGroup('nimble-samples', src, depend = ['RT_NIMBLE_USING_SAMPLES'], CPPPATH = CPPPATH)
+
+list = os.listdir(cwd)
+for item in list:
+    if os.path.isfile(os.path.join(cwd, item, 'SConscript')):
+        group = group + SConscript(os.path.join(item, 'SConscript'))
+
+Return('group')

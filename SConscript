@@ -81,6 +81,13 @@ if rtconfig.CROSS_TOOL == 'keil':
 if rtconfig.CROSS_TOOL == 'gcc':
     LOCAL_CCFLAGS += ' -Wno-format -Wno-unused-variable -Wno-unused-but-set-variable'
 
+# RT_USING_NIMBLE or PKG_USING_NIMBLE
 group = DefineGroup('nimble', src, depend = ['RT_USING_NIMBLE'], CPPPATH = path, CPPDEFINES = CPPDEFINES, LOCAL_CCFLAGS = LOCAL_CCFLAGS)
+if GetDepend(['PKG_USING_NIMBLE']):
+    group = DefineGroup('nimble', src, depend = ['PKG_USING_NIMBLE'], CPPPATH = path, CPPDEFINES = CPPDEFINES, LOCAL_CCFLAGS = LOCAL_CCFLAGS)
+
+# add nimble samples
+if GetDepend(['RT_NIMBLE_USING_SAMPLES']):
+    group += SConscript('samples/SConscript', exports = 'group')
 
 Return('group')

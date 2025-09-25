@@ -171,6 +171,14 @@ if RT_USING_NIMBLE
             This allows to configure maximum size of advertising data and scan
             response data used in LE Advertising Extensions. Valid range 31-1650.
 
+    config RT_NIMBLE_USING_SAMPLES
+        select RT_USING_ULOG
+        bool "NimBLE Samples"
+        default n
+        help
+            Enable NimBLE samples, which are located in the samples directory.
+            These samples can be used to test and demonstrate NimBLE features.
+
     choice
         prompt "Log level"
         default NIMBLE_DEBUG_LEVEL_I
